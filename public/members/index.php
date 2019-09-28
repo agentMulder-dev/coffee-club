@@ -1,5 +1,14 @@
 <?php require_once('../../private/initialize.php'); ?>
 
+<?php $page_title = 'Members'; ?>
+<?php include(SHARED_PATH . '/header.php'); ?>
+
+<div id="content">
+    <h2>Members</h2>
+
+    <div class="actions">
+      <a class="action" href="#">Create New Member</a>
+    </div>
 
 <?php
   $members = [
@@ -9,14 +18,6 @@
     ['id' => '4', 'firstName' => 'Francis', 'lastName' => 'Moore', 'email' => 'francism@email.com'],
   ];
 ?>
-
-<?php $page_title = 'Members'; ?>
-<?php include(SHARED_PATH . '/header.php'); ?>
-
-<div id="content">
-    <h2>Members</h2>
-
-   
 
   	<table class="list">
   	  <tr>
@@ -35,7 +36,7 @@
         <tr>
           <td><?php echo h($member['id']); ?></td>
           <td><?php echo h($member['firstName']); ?></td>
-          <td><?php echo $member['lastName'] == 1 ? 'true' : 'false'; ?></td>
+          <td><?php echo $member['lastName']; ?></td>
     	    <td><?php echo h($member['email']); ?></td>
           <td><a class="action" href="<?php echo 
           url_for('/members/show.php?id=' . h(u($member['id']))); ?>">View</a></td>
@@ -47,8 +48,6 @@
   	</table>
 
   </div>
-  <div class="actions">
-      <a class="action" href="#">Create New Member</a>
-    </div>
+ 
  
 <?php include(SHARED_PATH . '/footer.php'); ?>
