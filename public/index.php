@@ -14,6 +14,7 @@
     <h2>Main Menu</h2>
     <ul>
       <li><a href="/web250/prj00/coffee-club/public/members/index.php">Member View -- contact information</a>
+      <li><a href="<?php echo url_for('login.php'); ?>">Login</a></li>
 </li>
     </ul>
   </div>
