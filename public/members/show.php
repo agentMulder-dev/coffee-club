@@ -1,9 +1,9 @@
-<?php require_once('/../../private/initialize.php');
+<?php require_once('../../private/initialize.php');
 
 // $id = $_GET['id'] ? $_GET['id'] : '1';
 $memberID = $_GET['id'] ?? '1'; 
 
-$page_title = 'Show Page';
+$page_title = 'Show Member Page';
 
 include(SHARED_PATH . '/header.php');
 
