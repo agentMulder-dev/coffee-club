@@ -96,7 +96,7 @@
   // has_unique_page_menu_name('History')
   // * Validates uniqueness of pages.menu_name
   // * For new records, provide only the menu_name.
-  // * For existing records, provide current ID as second arugment
+  // * For existing records, provide current ID as second argument
   //   has_unique_page_menu_name('History', 4)
   function has_unique_email($email, $current_id="0") {
     global $db;

@@ -2,9 +2,30 @@
 
 require_once('../../private/initialize.php');
 
-if(is_post_request()) {
+//$member_set = find_all_members();
+//$member_count = mysqli_num_rows($member_set) + 1;
+//mysqli_free_result($member_set);
 
-  // Handle form values sent by new.php
+if(is_post_request()) {
+ 
+  $captcha;
+ 
+  if(isset($_POST['g-recaptcha-response'])){
+    $captcha=$_POST['g-recaptcha-response'];
+  }
+  if(!$captcha){
+    echo '<h2>Please check the the captcha form.</h2>';
+    exit;
+  }
+  $secretKey = SECRET_KEY;
+  $ip = $_SERVER['REMOTE_ADDR'];
+  // post request to server
+  $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+  $response = file_get_contents($url);
+  $responseKeys = json_decode($response,true);
+  // should return JSON with success as true
+  if($responseKeys["success"]) {
+          
 
   $member = [];
   //$member['member_ID'] = $_POST['member_ID'] ?? '';
@@ -12,7 +33,7 @@ if(is_post_request()) {
   $member['last_name'] = $_POST['last_name'] ?? '';
   $member['email']= $_POST['email'] ?? '';
   $member['phone'] = $_POST['phone'] ?? '';
-  $member['member_level'] = $_POST['member_level'] ?? '';
+  $member['member_level'] = trim($_POST['member_level']) ?? '';
   $member['pass_hash']= $_POST['pass_hash'] ?? '';
 
   $result = insert_member($member);
@@ -22,6 +43,11 @@ if(is_post_request()) {
 } else {
   $errors = $result;
 }
+  } else {
+          echo '<h2>You are spammer ! Get the @$%K out</h2>';
+  }
+
+
 
 } else {
   //display the blank form
@@ -34,12 +60,7 @@ if(is_post_request()) {
   $member['member_level'] = '';
 }
 
-$member_set = find_all_members();
-$member_count = mysqli_num_rows($member_set) + 1;
-mysqli_free_result($member_set);
-
 ?>
-
 
 <?php $page_title = 'Create Member'; ?>
 <?php include(SHARED_PATH . '/header.php'); ?>
@@ -86,7 +107,8 @@ mysqli_free_result($member_set);
       </dl>
       
       <div id="operations">
-        <input type="submit" value="Create Member" />
+      <div class="g-recaptcha" data-sitekey="<?php echo SITE_KEY;?>"></div> 
+      <input type="submit" value="Create Member" />
       </div>
     </form>
 
