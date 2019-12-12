@@ -16,3 +16,13 @@
     <header>
       <h1>Member Area</h1>
     </header>
+
+    <navigation>
+      <ul>
+        <li>User: <?php echo $_SESSION['username'] ?? ''; ?></li>
+        <li><a href="<?php echo url_for('/index.php'); ?>">Menu</a></li>
+        <li><a href="<?php echo url_for('/logout.php'); ?>">Logout</a></li>
+      </ul>
+    </navigation>
+
+    <?php echo display_session_message(); ?>

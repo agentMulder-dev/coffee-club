@@ -2,16 +2,17 @@
 
 require_once('../../private/initialize.php');
 
+//require_login();
+
 if(!isset($_GET['id'])) {
   redirect_to(url_for('/members/index.php'));
 }
 $member_ID = $_GET['id'];
 
 if(is_post_request()) {
-
   $result = delete_member($member_ID);
+  $_SESSION['message'] = 'The member was deleted successfully.';
   redirect_to(url_for('/members/index.php'));
-
 } else {
   $member = find_member_by_member_ID($member_ID);
 }

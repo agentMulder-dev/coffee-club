@@ -2,9 +2,7 @@
 
 require_once('../../private/initialize.php');
 
-//$member_set = find_all_members();
-//$member_count = mysqli_num_rows($member_set) + 1;
-//mysqli_free_result($member_set);
+require_login();
 
 if(is_post_request()) {
  
@@ -31,24 +29,23 @@ if(is_post_request()) {
   //$member['member_ID'] = $_POST['member_ID'] ?? '';
   $member['first_name'] = $_POST['first_name'] ?? '';
   $member['last_name'] = $_POST['last_name'] ?? '';
-  $member['email']= $_POST['email'] ?? '';
+  $member['email'] = $_POST['email'] ?? '';
   $member['phone'] = $_POST['phone'] ?? '';
-  $member['member_level'] = trim($_POST['member_level']) ?? '';
-  $member['pass_hash']= $_POST['pass_hash'] ?? '';
+  $member['username'] = $_POST['username'] ?? '';
+  $member['member_level'] = $_POST['member_level'] ?? '';
+  $member['password'] = $_POST['password'] ?? '';
+  $member['confirm_password'] = $_POST['confirm_password'] ?? '';
 
   $result = insert_member($member);
   if($result === true) {
     $new_id = mysqli_insert_id($db);
+    $_SESSION['message'] = 'The member was created successfully.';
     redirect_to(url_for('/members/show.php?id=' . $new_id));
 } else {
   $errors = $result;
 }
-  } else {
-          echo '<h2>You are spammer ! Get the @$%K out</h2>';
-  }
-
-
-
+  } 
+  
 } else {
   //display the blank form
   $member = [];
@@ -57,7 +54,10 @@ if(is_post_request()) {
   $member['last_name'] = '';
   $member['email']= '';
   $member['phone'] = '';
+  $member['username'] = '';
   $member['member_level'] = '';
+  $member['password'] = '';
+  $member['confirm_password'] = '';
 }
 
 ?>
@@ -71,48 +71,67 @@ if(is_post_request()) {
 
   <div class="member new">
     <h1>Create Member</h1>
-    
+
     <?php echo display_errors($errors); ?>
 
     <form action="<?php echo url_for('/members/new.php'); ?>" method="post">
 
-    
+
       <dl>
         <dt>First Name</dt>
-        <dd><input type="text" name="first_name" value="" /></dd>
+        <dd><input type="text" name="first_name" value="<?php echo h($member['first_name']); ?>" /></dd>
       </dl>
-    
+
       <dl>
         <dt>Last Name</dt>
-        <dd><input type="text" name="last_name" value="" /></dd>
+        <dd><input type="text" name="last_name" value="<?php echo h($member['last_name']); ?>" /></dd>
       </dl>
 
       <dl>
         <dt>Email</dt>
-        <dd><input type="text" name="email" value="" /></dd>
+        <dd><input type="text" name="email" value="<?php echo h($member['email']); ?>" />
+        </dd>
       </dl>
 
       <dl>
         <dt>Phone</dt>
-        <dd><input type="tel" name="phone" value="" /></dd>
+        <dd><input type="tel" name="phone" value="<?php echo h($member['phone']); ?>" />
+        </dd>
       </dl>
+
+      <dl>
+        <dt>Username</dt>
+        <dd><input type="text" name="username" value="<?php echo h($member['username']); ?>" /></dd>
+      </dl>
+
       <dl>
         <dt>Member Level</dt>
-        <dd><input type="text" name="member_level" value="" /></dd>
+        <dd><input type="text" name="member_level" value="<?php echo h($member['member_level']); ?>" />
+        </dd>
       </dl>
 
       <dl>
         <dt>Password</dt>
-        <dd><input type="password" name="pass_hash" value="" /></dd>
+        <dd><input type="password" name="password" value="" /></dd>
       </dl>
-      
+
+      <dl>
+        <dt>Confirm Password</dt>
+        <dd><input type="password" name="confirm_password" value="" /></dd>
+      </dl>
+      <p>
+        Passwords should be at least 12 characters and include at least one uppercase letter, lowercase letter, number,
+        and symbol.
+      </p>
+      <br />
+
       <div id="operations">
-      <div class="g-recaptcha" data-sitekey="<?php echo SITE_KEY;?>"></div> 
-      <input type="submit" value="Create Member" />
+        <div class="g-recaptcha" data-sitekey="<?php echo SITE_KEY;?>"></div>
+        <input type="submit" value="Create Member" />
       </div>
     </form>
-
   </div>
+</div>
 
 </div>
 
